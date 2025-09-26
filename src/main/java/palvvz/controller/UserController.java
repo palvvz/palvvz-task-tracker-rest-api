@@ -14,8 +14,6 @@ import java.net.URI;
 
 import java.util.List;
 
-
-
 @RestController
 @RequestMapping("${app.main.endpoint}/users")
 //@RequiredArgsConstructor
