@@ -3,10 +3,10 @@ spring:
     url: jdbc:h2:mem:todo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: sa
-    password: 
+    password:
   jpa:
     hibernate:
-      ddl-auto: update
+    ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -21,7 +21,7 @@ server:
 
 app:
   main:
-      endpoint: /api/v1
-      timeout: 30
-      enabled: true
+    endpoint: /api/v1
+    timeout: 30
+    enabled: true
 
