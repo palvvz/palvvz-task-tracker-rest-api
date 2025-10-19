@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import palvvz.domain.User;
-import palvvz.dto.user.UserRequestRegisterDto;
+import palvvz.dto.user.UserRequestDto;
 import palvvz.dto.user.UserResponseDto;
 import palvvz.exception.ResourceNotFoundException;
 import palvvz.mapper.UserMapper;
@@ -24,7 +24,7 @@ public class UserService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final PasswordEncoder passwordEncoder;
 
-    public UserResponseDto register(UserRequestRegisterDto request) {
+    public UserResponseDto register(UserRequestDto request) {
         //TODO catch Data Integrity Violation
         var user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import palvvz.dto.user.UserRequestRegisterDto;
+import palvvz.dto.user.UserRequestDto;
 import palvvz.dto.user.UserResponseDto;
 import palvvz.mapper.UserMapper;
 import palvvz.repository.UserRepository;
@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> register(
-            @Valid @RequestBody UserRequestRegisterDto request) {
+            @Valid @RequestBody UserRequestDto request) {
         var userDto = userService.register(request);
         return ResponseEntity.ok().body(userDto);
     }
