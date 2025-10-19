@@ -10,11 +10,12 @@ import lombok.*;
                 @Index(name = "idx_users_email", columnList = "email"),
                 @Index(name = "idx_users_password", columnList = "password")
         })
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
     @Id

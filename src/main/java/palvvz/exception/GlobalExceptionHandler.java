@@ -40,20 +40,3 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 }
-
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    public ResponseEntity<?> handleNotFound(ResourceNotFoundException ex) {
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("error", ex.getMessage());
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
-//    }
-//
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
-//        Map<String, Object> body = new HashMap<>();
-//        body.put("error", "Validation failed");
-//        body.put("details", ex.getBindingResult().getFieldErrors().stream()
-//                .map(e -> e.getField() + ": " + e.getDefaultMessage()).toList());
-//        return ResponseEntity.badRequest().body(body);
-//    }
-

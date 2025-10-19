@@ -5,6 +5,8 @@ spring:
     username: postgres
     password: 123456
 
+  jwt:
+    secret: ${JWT_SECRET}
 
 #spring.datasource.url=jdbc:postgresql://localhost:5432/tasks
 #spring.datasource.username=postgres

@@ -28,11 +28,4 @@ public class UserController {
         var res = userRepository.findAll().stream().map(userMapper::toDto).toList();
         return res;
     }
-
-    @PostMapping
-    public ResponseEntity<?> register(
-            @Valid @RequestBody UserRequestDto request) {
-        var userDto = userService.register(request);
-        return ResponseEntity.ok().body(userDto);
-    }
 }
