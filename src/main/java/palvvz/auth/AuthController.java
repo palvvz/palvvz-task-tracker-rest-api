@@ -1,6 +1,5 @@
 package palvvz.auth;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
