@@ -2,11 +2,12 @@ package palvvz.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import palvvz.domain.User;
-import palvvz.dto.user.UserCreateEditDto;
-import palvvz.dto.user.UserReadDto;
+import palvvz.dto.user.UserRequestRegisterDto;
+import palvvz.dto.user.UserResponseDto;
 import palvvz.exception.ResourceNotFoundException;
 import palvvz.mapper.UserMapper;
 import palvvz.repository.UserRepository;
@@ -21,27 +22,35 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final PasswordEncoder passwordEncoder;
 
+    public UserResponseDto register(UserRequestRegisterDto request) {
+        //TODO catch Data Integrity Violation
+        var user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return userMapper.toDto(user);
+    }
 
-    public List<UserReadDto> getAll() {
+    public List<UserResponseDto> getAll() {
         return userRepository.findAll().stream().map(userMapper::toDto).toList();
     }
 
-    public UserReadDto findById(Long id) {
+    public UserResponseDto findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + id));
         return userMapper.toDto(user);
     }
 
-    public UserReadDto create(UserCreateEditDto userDto) {
-        if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-        User user = userMapper.fromCreate(userDto);
-        user = userRepository.save(user);
-        return userMapper.toDto(user);
-    }
-//
+//    public UserResponseDto create(UserCreateEditDto userDto) {
+//        if (userRepository.existsByEmail(userDto.getEmail())) {
+//            throw new IllegalArgumentException("Email already exists");
+//        }
+//        User user = userMapper.fromCreate(userDto);
+//        user = userRepository.save(user);
+//        return userMapper.toDto(user);
+//    }
+////
 //    @Override
 //    public UserReadDto update(Long id, UpdateUserDto request) {
 //        User user = userRepository.findById(id)

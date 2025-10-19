@@ -1,5 +1,6 @@
 package palvvz.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,29 +13,47 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleNotFound(ResourceNotFoundException ex) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, Object>> handleValidationErrors(
+            MethodArgumentNotValidException ex
+    ) {
+        var errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
         Map<String, Object> body = new HashMap<>();
-        body.put("error", "Validation failed");
-        body.put("details", ex.getBindingResult().getFieldErrors().stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage()).toList());
-        return ResponseEntity.badRequest().body(body);
+        body.put("error", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
-//    Error creating bean with name 'handlerExceptionResolver
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {
-//        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-//                .map(err -> err.getField() + ": " + err.getDefaultMessage())
-//                .toList();
-//
-//        return ResponseEntity.badRequest().body(errors);
-//    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "User with this email already exists");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
 }
+
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<?> handleNotFound(ResourceNotFoundException ex) {
+//        Map<String, Object> body = new HashMap<>();
+//        body.put("error", ex.getMessage());
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+//    }
+//
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+//        Map<String, Object> body = new HashMap<>();
+//        body.put("error", "Validation failed");
+//        body.put("details", ex.getBindingResult().getFieldErrors().stream()
+//                .map(e -> e.getField() + ": " + e.getDefaultMessage()).toList());
+//        return ResponseEntity.badRequest().body(body);
+//    }
+

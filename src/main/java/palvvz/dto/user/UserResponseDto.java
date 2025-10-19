@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserReadDto {
+public class UserResponseDto {
     private Long id;
     private String email;
+    private String password;
     // Password intentionally omitted in response DTO for safety
 }

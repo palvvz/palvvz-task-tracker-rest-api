@@ -3,36 +3,36 @@ package palvvz.controller;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import palvvz.dto.user.UserCreateEditDto;
-import palvvz.dto.user.UserReadDto;
+import palvvz.dto.user.UserRequestRegisterDto;
+import palvvz.dto.user.UserResponseDto;
+import palvvz.mapper.UserMapper;
+import palvvz.repository.UserRepository;
 import palvvz.service.UserService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("${app.main.endpoint}/users")
+@RequestMapping("/users")
 
 public class UserController {
-
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @GetMapping
-    public List<UserReadDto> getAll() {
-        return userService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public UserReadDto findById(@PathVariable("id") Long id) {
-        return userService.findById(id);
+    public List<UserResponseDto> getAll() {
+        var res = userRepository.findAll().stream().map(userMapper::toDto).toList();
+        return res;
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody UserCreateEditDto request) {
-        UserReadDto dto = userService.create(request);
-        return ResponseEntity.created(URI.create("/api/users/" + dto.getId())).body(dto);
+    public ResponseEntity<?> register(
+            @Valid @RequestBody UserRequestRegisterDto request) {
+        var userDto = userService.register(request);
+        return ResponseEntity.ok().body(userDto);
     }
-
 }

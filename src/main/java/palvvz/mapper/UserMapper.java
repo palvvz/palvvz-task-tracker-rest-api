@@ -7,12 +7,15 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import palvvz.domain.User;
 import palvvz.dto.user.UpdateUserDto;
 import palvvz.dto.user.UserCreateEditDto;
-import palvvz.dto.user.UserReadDto;
+import palvvz.dto.user.UserRequestRegisterDto;
+import palvvz.dto.user.UserResponseDto;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserReadDto toDto(User user);
+    UserResponseDto toDto(User user);
+
+    User toEntity(UserRequestRegisterDto request);
 
     User fromCreate(UserCreateEditDto req);
 
