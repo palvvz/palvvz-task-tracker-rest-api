@@ -6,7 +6,9 @@ spring:
     password: 123456
 
   jwt:
-    secret: ${JWT_SECRET}
+   secret: ${JWT_SECRET}
+   accessTokenExpiration: 900 # 15m
+   refreshTokenExpiration: 604800 # 7d
 
 #spring.datasource.url=jdbc:postgresql://localhost:5432/tasks
 #spring.datasource.username=postgres

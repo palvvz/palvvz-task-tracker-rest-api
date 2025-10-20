@@ -10,20 +10,17 @@ import palvvz.repository.UserRepository;
 
 import java.util.Collections;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var user = userRepository.findByEmail(email).orElseThrow(
-                () -> new UsernameNotFoundException("User not found"));
-
-        return new User(
-            user.getEmail(),
-            user.getPassword(),
-            Collections.emptyList()
-        );
+        var userRepo = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new User(email,
+                userRepo.getPassword(),
+                Collections.emptyList());
     }
 }

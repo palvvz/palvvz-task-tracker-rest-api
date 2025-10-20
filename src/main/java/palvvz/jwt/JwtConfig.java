@@ -1,6 +1,9 @@
 package palvvz.jwt;
 
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.MacAlgorithm;
+import io.jsonwebtoken.security.SignatureAlgorithm;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,7 @@ public class JwtConfig {
     private int refreshTokenExpiration;
 
     public SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        MacAlgorithm alg = Jwts.SIG.HS256;
+        return alg.key().build();
     }
 }
